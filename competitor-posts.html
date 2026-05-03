@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitor LinkedIn Posts — Top 5 by Engagement</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #F4F2EE;
+            color: #191919;
+            line-height: 1.5;
+        }
+
+        /* ===== HEADER ===== */
+        .page-header {
+            background: linear-gradient(135deg, #1E293B, #334155);
+            color: white;
+            padding: 48px 40px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .page-header p {
+            opacity: 0.7;
+            font-size: 0.95rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .page-header .meta {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* ===== RANK HEADER ===== */
+        .rank-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .rank-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .rank-badge.gold { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .rank-badge.silver { background: linear-gradient(135deg, #94A3B8, #64748B); }
+        .rank-badge.bronze { background: linear-gradient(135deg, #D97706, #B45309); }
+        .rank-badge.four { background: linear-gradient(135deg, #6366F1, #4F46E5); }
+        .rank-badge.five { background: linear-gradient(135deg, #10B981, #059669); }
+
+        .rank-info {
+            flex: 1;
+        }
+
+        .rank-company {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .rank-company.eleven { color: #1E293B; }
+        .rank-company.relevance { color: #10B981; }
+
+        .rank-eng {
+            font-size: 0.78rem;
+            color: #666;
+        }
+
+        .rank-eng strong {
+            color: #191919;
+        }
+
+        /* ===== LINKEDIN POST CARD ===== */
+        .li-post {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .li-post-header {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px 16px 0;
+            gap: 12px;
+        }
+
+        .li-post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .li-post-meta { flex: 1; }
+
+        .li-post-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .li-post-headline {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 1px;
+        }
+
+        .li-post-time {
+            font-size: 0.72rem;
+            color: #666;
+            margin-top: 1px;
+        }
+
+        .li-post-dots {
+            font-size: 1.2rem;
+            color: #666;
+            padding: 4px 8px;
+        }
+
+        .li-post-content {
+            padding: 12px 16px;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        .li-post-content p {
+            margin-bottom: 10px;
+        }
+
+        .li-post-content p:last-child { margin-bottom: 0; }
+        .li-post-content strong { font-weight: 600; }
+
+        .li-post-content .hashtag {
+            color: #0A66C2;
+            font-weight: 600;
+        }
+
+        /* Engagement bar */
+        .li-post-engagement {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .li-reactions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .li-reaction-icons { display: flex; }
+
+        .li-reaction-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            border: 2px solid white;
+            margin-right: -4px;
+        }
+
+        .li-reaction-icon.like { background: #0A66C2; }
+        .li-reaction-icon.celebrate { background: #44712E; }
+        .li-reaction-icon.love { background: #DF704D; }
+        .li-reaction-icon.insightful { background: #E7A33E; }
+
+        .li-engagement-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Actions */
+        .li-post-actions {
+            display: flex;
+            border-top: 1px solid #E0E0E0;
+            padding: 4px 8px;
+        }
+
+        .li-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #666;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .li-action-btn:hover { background: #F0F0F0; }
+        .li-action-icon { font-size: 1.15rem; }
+
+        /* Link banner */
+        .li-link-banner {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #F3F6F8;
+            border-top: 1px solid #E0E0E0;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .li-link-banner:hover { background: #EDF0F3; }
+
+        .li-link-banner .link-text {
+            flex: 1;
+        }
+
+        .li-link-banner .link-source {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .li-link-banner .link-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #191919;
+        }
+
+        .li-link-arrow {
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        /* Video indicator */
+        .li-video-banner {
+            background: linear-gradient(135deg, #0F172A, #1E293B);
+            color: white;
+            padding: 40px 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .li-video-banner .play-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.4rem;
+        }
+
+        .li-video-banner .video-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .li-video-banner .video-duration {
+            font-size: 0.7rem;
+            opacity: 0.4;
+            margin-top: 4px;
+        }
+
+        /* Analysis box */
+        .analysis {
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: -16px 0 32px;
+            font-size: 0.84rem;
+        }
+
+        .analysis-title {
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #92400E;
+            margin-bottom: 6px;
+        }
+
+        .analysis p {
+            color: #78350F;
+            line-height: 1.5;
+        }
+
+        /* ===== TAKEAWAY SECTION ===== */
+        .takeaway-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid #E0E0E0;
+            margin-top: 16px;
+        }
+
+        .takeaway-section h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .takeaway-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .takeaway-card {
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .takeaway-card h4 {
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .takeaway-card p {
+            font-size: 0.82rem;
+            color: #666;
+            line-height: 1.45;
+        }
+
+        .takeaway-card.full-width {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #EEF2FF, #F5F3FF);
+            border-color: #C7D2FE;
+        }
+
+        .takeaway-card.full-width h4 { color: #4F46E5; }
+
+        @media (max-width: 700px) {
+            .takeaway-grid { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+    <h1>Competitor LinkedIn Posts: Top 5 by Engagement</h1>
+    <p>The highest-performing LinkedIn posts from ElevenLabs and Relevance AI, with engagement data and strategic analysis</p>
+    <div class="meta">
+        <span>Researched: May 2026</span>
+        <span>Sources: LinkedIn, Web search</span>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ==================== #1 ==================== -->
+    <div class="rank-header">
+        <div class="rank-badge gold">#1</div>
+        <div class="rank-info">
+            <div class="rank-company eleven">ElevenLabs</div>
+            <div class="rank-eng"><strong>15,238 likes</strong> &bull; 585 comments &bull; Founder post</div>
+        </div>
+    </div>
+
+    <div class="li-post">
+        <div class="li-post-header">
+            <div class="li-post-avatar" style="background: linear-gradient(135deg, #1E293B, #475569);">MS</div>
+            <div class="li-post-meta">
+                <div class="li-post-name">Mati Staniszewski</div>
+                <div class="li-post-headline">Co-Founder at ElevenLabs</div>
+                <div class="li-post-time">Feb 4, 2026 &bull; &#127760;</div>
+            </div>
+            <div class="li-post-dots">&#8943;</div>
+        </div>
+
+        <div class="li-post-content">
+            <p>Today, ElevenLabs is announcing a $500M Series D round at an $11B valuation, led by Sequoia Capital.</p>
+
+            <p>Andrew Reed from Sequoia is joining our board. a16z quadrupled their investment. ICONIQ tripled theirs. New investors include Lightspeed, Evantic Capital, and BOND.</p>
+
+            <p>We ended 2025 with <strong>$330M+ ARR</strong> and a team of 400.</p>
+
+            <p>Our customers include <strong>Deutsche Telekom, Square, Deliveroo, Revolut</strong>, and the Ukrainian government.</p>
+
+            <p>We're building three product lines: <strong>ElevenAgents</strong> (enterprise conversational AI), <strong>ElevenCreative</strong> (creator tools), and our underlying research spanning text-to-speech, speech-to-text, music, and dubbing.</p>
+
+            <p>What's shipping next: new emotion-aware conversational models, improved turn-taking orchestration, and expanded enterprise infrastructure.</p>
+
+            <p>We're just getting started.</p>
+        </div>
+
+        <div class="li-video-banner">
+            <div class="play-btn">&#9654;</div>
+            <div class="video-label">Video: ElevenLabs Series D Announcement</div>
+            <div class="video-duration">1:45</div>
+        </div>
+
+        <div class="li-post-engagement">
+            <div class="li-reactions">
+                <div class="li-reaction-icons">
+                    <div class="li-reaction-icon like">&#128077;</div>
+                    <div class="li-reaction-icon celebrate">&#128079;</div>
+                    <div class="li-reaction-icon love">&#10084;</div>
+                    <div class="li-reaction-icon insightful">&#128161;</div>
+                </div>
+                &nbsp;15,238
+            </div>
+            <div class="li-engagement-right">
+                <span>585 comments</span>
+            </div>
+        </div>
+
+        <div class="li-post-actions">
+            <div class="li-action-btn"><span class="li-action-icon">&#128077;</span> Like</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128172;</span> Comment</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128257;</span> Repost</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#9993;</span> Send</div>
+        </div>
+
+        <a class="li-link-banner" href="https://www.linkedin.com/posts/matiii_today-elevenlabs-is-announcing-a-500m-series-activity-7424814850180161537-413d" target="_blank">
+            <div class="link-text">
+                <div class="link-source">linkedin.com</div>
+                <div class="link-title">View original post &rarr;</div>
+            </div>
+            <div class="li-link-arrow">&#8599;</div>
+        </a>
+    </div>
+
+    <div class="analysis">
+        <div class="analysis-title">Why it worked</div>
+        <p>Founder-authored funding post with jaw-dropping numbers ($11B, $330M ARR, 400 people). Led with the milestone, named every investor, dropped customer logos. Founder posts consistently outperform company page posts by 5-10x on LinkedIn. The video added dwell time which the algorithm heavily rewards.</p>
+    </div>
+
+    <!-- ==================== #2 ==================== -->
+    <div class="rank-header">
+        <div class="rank-badge silver">#2</div>
+        <div class="rank-info">
+            <div class="rank-company eleven">ElevenLabs</div>
+            <div class="rank-eng"><strong>6,519 likes</strong> &bull; 195 comments &bull; Founder post</div>
+        </div>
+    </div>
+
+    <div class="li-post">
+        <div class="li-post-header">
+            <div class="li-post-avatar" style="background: linear-gradient(135deg, #1E293B, #475569);">MS</div>
+            <div class="li-post-meta">
+                <div class="li-post-name">Mati Staniszewski</div>
+                <div class="li-post-headline">Co-Founder at ElevenLabs</div>
+                <div class="li-post-time">Nov 19, 2025 &bull; &#127760;</div>
+            </div>
+            <div class="li-post-dots">&#8943;</div>
+        </div>
+
+        <div class="li-post-content">
+            <p><strong>A brief story of ElevenLabs past, present and future.</strong></p>
+
+            <p>When Piotr and I started ElevenLabs, we recognized technology was advancing rapidly while human interaction with it remained unchanged. We believed in making seamless interaction and creation with technology our core mission.</p>
+
+            <p><strong>What we've built so far:</strong></p>
+
+            <p>Voice Lab &mdash; emotion-rich voice models across 70+ languages, sub-100ms latency.</p>
+
+            <p>Agent Lab &mdash; conversational AI platforms powering customer experience transformations.</p>
+
+            <p>Revenue grew from zero to ~$300M. Team grew from 2 to 350.</p>
+
+            <p><strong>Where we're going:</strong></p>
+
+            <p>1. Speech becomes the primary interface across all devices<br>
+            2. Language barriers dissolve through real-time translation<br>
+            3. Omnipresent AI products combining voice, text, image, and video</p>
+
+            <p>The future isn't just about better AI. It's about making technology disappear into natural human interaction.</p>
+        </div>
+
+        <div class="li-video-banner">
+            <div class="play-btn">&#9654;</div>
+            <div class="video-label">Video: ElevenLabs — Past, Present, and Future</div>
+            <div class="video-duration">8:46</div>
+        </div>
+
+        <div class="li-post-engagement">
+            <div class="li-reactions">
+                <div class="li-reaction-icons">
+                    <div class="li-reaction-icon like">&#128077;</div>
+                    <div class="li-reaction-icon celebrate">&#128079;</div>
+                    <div class="li-reaction-icon love">&#10084;</div>
+                </div>
+                &nbsp;6,519
+            </div>
+            <div class="li-engagement-right">
+                <span>195 comments</span>
+            </div>
+        </div>
+
+        <div class="li-post-actions">
+            <div class="li-action-btn"><span class="li-action-icon">&#128077;</span> Like</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128172;</span> Comment</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128257;</span> Repost</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#9993;</span> Send</div>
+        </div>
+
+        <a class="li-link-banner" href="https://www.linkedin.com/posts/matiii_a-brief-story-of-elevenlabs-past-present-activity-7397051294378577920-1uuz" target="_blank">
+            <div class="link-text">
+                <div class="link-source">linkedin.com</div>
+                <div class="link-title">View original post &rarr;</div>
+            </div>
+            <div class="li-link-arrow">&#8599;</div>
+        </a>
+    </div>
+
+    <div class="analysis">
+        <div class="analysis-title">Why it worked</div>
+        <p>Origin story + vision = LinkedIn gold. The "from 2 to 350 people, zero to $300M" arc is inherently shareable. The 8:46 video created massive dwell time (LinkedIn's #1 ranking signal in 2026). Vision-forward content ("technology should disappear") invites philosophical comments, which weigh 15x more than likes in the algorithm.</p>
+    </div>
+
+    <!-- ==================== #3 ==================== -->
+    <div class="rank-header">
+        <div class="rank-badge bronze">#3</div>
+        <div class="rank-info">
+            <div class="rank-company eleven">ElevenLabs</div>
+            <div class="rank-eng"><strong>4,583 likes</strong> &bull; 210 comments &bull; Company page</div>
+        </div>
+    </div>
+
+    <div class="li-post">
+        <div class="li-post-header">
+            <div class="li-post-avatar" style="background: #1E293B; font-size: 0.7rem;">&#9899;</div>
+            <div class="li-post-meta">
+                <div class="li-post-name">ElevenLabs</div>
+                <div class="li-post-headline">291,207 followers</div>
+                <div class="li-post-time">Feb 18, 2024 &bull; &#127760;</div>
+            </div>
+            <div class="li-post-dots">&#8943;</div>
+        </div>
+
+        <div class="li-post-content">
+            <p>We were blown away by the Sora announcement but felt it was missing something...</p>
+
+            <p>What if you could describe a sound and generate it with AI?</p>
+
+            <p><strong>AI Sound Effects are coming to ElevenLabs.</strong></p>
+        </div>
+
+        <div class="li-video-banner">
+            <div class="play-btn">&#9654;</div>
+            <div class="video-label">Video: AI Sound Effects Demo</div>
+            <div class="video-duration">0:58</div>
+        </div>
+
+        <div class="li-post-engagement">
+            <div class="li-reactions">
+                <div class="li-reaction-icons">
+                    <div class="li-reaction-icon like">&#128077;</div>
+                    <div class="li-reaction-icon celebrate">&#128079;</div>
+                    <div class="li-reaction-icon love">&#10084;</div>
+                </div>
+                &nbsp;4,583
+            </div>
+            <div class="li-engagement-right">
+                <span>210 comments</span>
+            </div>
+        </div>
+
+        <div class="li-post-actions">
+            <div class="li-action-btn"><span class="li-action-icon">&#128077;</span> Like</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128172;</span> Comment</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128257;</span> Repost</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#9993;</span> Send</div>
+        </div>
+
+        <a class="li-link-banner" href="https://www.linkedin.com/posts/elevenlabsio_we-were-blown-away-by-the-sora-announcement-activity-7165015459795292160-E5Vz" target="_blank">
+            <div class="link-text">
+                <div class="link-source">linkedin.com</div>
+                <div class="link-title">View original post &rarr;</div>
+            </div>
+            <div class="li-link-arrow">&#8599;</div>
+        </a>
+    </div>
+
+    <div class="analysis">
+        <div class="analysis-title">Why it worked</div>
+        <p>Brilliant newsjacking. Rode the Sora hype wave the same week and positioned ElevenLabs as the missing piece. Only 3 lines of copy + a 58-second demo video. The post sparked debate (skeptics vs enthusiasts), generating 210 comments with lengthy replies &mdash; exactly what LinkedIn's algorithm rewards. Polarizing content outperforms neutral content every time.</p>
+    </div>
+
+    <!-- ==================== #4 ==================== -->
+    <div class="rank-header">
+        <div class="rank-badge four">#4</div>
+        <div class="rank-info">
+            <div class="rank-company eleven">ElevenLabs</div>
+            <div class="rank-eng"><strong>1,397 likes</strong> &bull; 30 comments &bull; Company page</div>
+        </div>
+    </div>
+
+    <div class="li-post">
+        <div class="li-post-header">
+            <div class="li-post-avatar" style="background: #1E293B; font-size: 0.7rem;">&#9899;</div>
+            <div class="li-post-meta">
+                <div class="li-post-name">ElevenLabs</div>
+                <div class="li-post-headline">291,207 followers</div>
+                <div class="li-post-time">Apr 15, 2026 &bull; &#127760;</div>
+            </div>
+            <div class="li-post-dots">&#8943;</div>
+        </div>
+
+        <div class="li-post-content">
+            <p>Razorpay, one of India's largest payments platforms serving millions of merchants, is scaling outbound engagement with <strong>ElevenAgents</strong>.</p>
+
+            <p>Reaching merchants at the right moment &mdash; to recover churned accounts, drive feature adoption, or communicate during incidents &mdash; is hard to do consistently at scale.</p>
+
+            <p>To solve this, Razorpay deployed voice agents in <strong>Hinglish</strong> that proactively call merchants and capture structured insights from every conversation, turning manual outreach into a scalable, repeatable process.</p>
+
+            <p>35,000+ merchant outreach calls with connection rates matching human benchmarks. Post-call insights automatically feed into analytics dashboards, creating feedback loops for continuous improvement.</p>
+        </div>
+
+        <div class="li-post-engagement">
+            <div class="li-reactions">
+                <div class="li-reaction-icons">
+                    <div class="li-reaction-icon like">&#128077;</div>
+                    <div class="li-reaction-icon celebrate">&#128079;</div>
+                    <div class="li-reaction-icon insightful">&#128161;</div>
+                </div>
+                &nbsp;1,397
+            </div>
+            <div class="li-engagement-right">
+                <span>30 comments</span>
+            </div>
+        </div>
+
+        <div class="li-post-actions">
+            <div class="li-action-btn"><span class="li-action-icon">&#128077;</span> Like</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128172;</span> Comment</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128257;</span> Repost</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#9993;</span> Send</div>
+        </div>
+
+        <a class="li-link-banner" href="https://www.linkedin.com/posts/elevenlabsio_razorpay-one-of-indias-largest-payments-activity-7450156635777449984-TjAa" target="_blank">
+            <div class="link-text">
+                <div class="link-source">linkedin.com</div>
+                <div class="link-title">View original post &rarr;</div>
+            </div>
+            <div class="li-link-arrow">&#8599;</div>
+        </a>
+    </div>
+
+    <div class="analysis">
+        <div class="analysis-title">Why it worked</div>
+        <p>Classic customer case study post, but done right: named the customer (Razorpay), stated the problem (merchant outreach at scale), highlighted a unique detail (Hinglish voice agents), and gave concrete numbers (35K+ calls). The "Hinglish" angle made it niche enough to feel authentic, not generic. This is the closest post to what Harmony competes with directly &mdash; AI voice agents doing outbound at scale.</p>
+    </div>
+
+    <!-- ==================== #5 ==================== -->
+    <div class="rank-header">
+        <div class="rank-badge five">#5</div>
+        <div class="rank-info">
+            <div class="rank-company relevance">Relevance AI</div>
+            <div class="rank-eng"><strong>200 likes</strong> &bull; 48 comments &bull; Company page</div>
+        </div>
+    </div>
+
+    <div class="li-post">
+        <div class="li-post-header">
+            <div class="li-post-avatar" style="background: linear-gradient(135deg, #059669, #10B981); font-size: 0.7rem;">R</div>
+            <div class="li-post-meta">
+                <div class="li-post-name">Relevance AI</div>
+                <div class="li-post-headline">40,390 followers</div>
+                <div class="li-post-time">May 6, 2025 &bull; &#127760;</div>
+            </div>
+            <div class="li-post-dots">&#8943;</div>
+        </div>
+
+        <div class="li-post-content">
+            <p><strong>BIG NEWS!</strong> Relevance AI Raises $24M Series B + Launch Week Begins!</p>
+
+            <p>We've secured $24M in Series B funding led by <strong>Bessemer Venture Partners</strong> &mdash; with continued support from Insight Partners, King River Capital, and Peak XV Partners &mdash; to help 1 million knowledge workers build their own AI workforces!</p>
+
+            <p>This accelerates our mission: helping teams create specialized AI agents that perform human-quality work on autopilot &mdash; so you're limited only by ideas, not team size.</p>
+
+            <p>Agent Drop starts now! Over the next 5 days, we're dropping major releases that will transform how you build and scale your AI workforce.</p>
+
+            <p><em>"By the end of 2025, having an agent builder platform will be table stakes for competitive organizations."</em> &mdash; Daniel Vassilev, Co-founder &amp; Co-CEO</p>
+
+            <p>Follow along this week as we unveil each new feature &mdash; your AI workforce is about to level up!</p>
+
+            <p><span class="hashtag">#AgentDrop</span> <span class="hashtag">#AIWorkforce</span></p>
+        </div>
+
+        <div class="li-video-banner" style="background: linear-gradient(135deg, #064E3B, #059669);">
+            <div class="play-btn">&#9654;</div>
+            <div class="video-label">Video: Relevance AI Series B Announcement</div>
+            <div class="video-duration">1:15</div>
+        </div>
+
+        <div class="li-post-engagement">
+            <div class="li-reactions">
+                <div class="li-reaction-icons">
+                    <div class="li-reaction-icon like">&#128077;</div>
+                    <div class="li-reaction-icon celebrate">&#128079;</div>
+                    <div class="li-reaction-icon love">&#10084;</div>
+                </div>
+                &nbsp;200
+            </div>
+            <div class="li-engagement-right">
+                <span>48 comments</span>
+            </div>
+        </div>
+
+        <div class="li-post-actions">
+            <div class="li-action-btn"><span class="li-action-icon">&#128077;</span> Like</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128172;</span> Comment</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#128257;</span> Repost</div>
+            <div class="li-action-btn"><span class="li-action-icon">&#9993;</span> Send</div>
+        </div>
+
+        <a class="li-link-banner" href="https://www.linkedin.com/posts/relevanceai_agentdrop-aiworkforce-activity-7325534876592427008-HMNV" target="_blank">
+            <div class="link-text">
+                <div class="link-source">linkedin.com</div>
+                <div class="link-title">View original post &rarr;</div>
+            </div>
+            <div class="li-link-arrow">&#8599;</div>
+        </a>
+    </div>
+
+    <div class="analysis">
+        <div class="analysis-title">Why it worked (and why it didn't work better)</div>
+        <p>Funding announcement + launch week combo. Solid investor names (Bessemer, Insight). But at 200 likes from a 40K-follower page, the engagement rate is notably lower than ElevenLabs. Key difference: this was posted from the company page, not a founder's personal profile. Also, the "1 million knowledge workers" goal feels abstract. Relevance AI's LinkedIn presence is significantly weaker than ElevenLabs &mdash; this is an opportunity for Harmony.</p>
+    </div>
+
+    <!-- ==================== TAKEAWAYS ==================== -->
+    <div class="takeaway-section">
+        <h2>Patterns &amp; Takeaways for Harmony</h2>
+
+        <div class="takeaway-grid">
+            <div class="takeaway-card">
+                <h4>Founder Posts Crush Company Posts</h4>
+                <p>ElevenLabs' founder posts get 15K+ likes vs 1-4K on company page posts. The #1 and #2 posts are both from Mati's personal profile. Your launch post should come from you personally, not just the OneAI page.</p>
+            </div>
+            <div class="takeaway-card">
+                <h4>Video Drives Dwell Time</h4>
+                <p>All top 5 posts include video. LinkedIn's 2026 "Depth Score" algorithm rewards seconds spent consuming content. The 8:46 origin story video (#2) outperformed many shorter posts. Long-form video + story arc = algorithm fuel.</p>
+            </div>
+            <div class="takeaway-card">
+                <h4>Concrete Numbers Win</h4>
+                <p>"$330M ARR", "$11B valuation", "35K+ calls", "zero to 350 people" &mdash; every high-performing post leads with specific, impressive numbers. Avoid vague claims. Show receipts.</p>
+            </div>
+            <div class="takeaway-card">
+                <h4>Relevance AI Is Weak on LinkedIn</h4>
+                <p>Their best post has 200 likes from 40K followers (0.5% engagement). ElevenLabs gets 5-15K from 291K (2-5%). Relevance AI's LinkedIn presence is not a threat. This is whitespace for Harmony to own.</p>
+            </div>
+            <div class="takeaway-card full-width">
+                <h4>The Playbook for Harmony's Launch Post</h4>
+                <p>Based on these patterns: Post from your personal profile, not the company page. Include a short video (1-2 min). Lead with the pain, not the product. Drop 2-3 concrete metrics or customer results. Tell a story arc (past pain &rarr; insight &rarr; what you built &rarr; vision). End with a question or invitation to drive comments (15+ word comments are weighted 15x more than likes). Post on Tuesday-Thursday between 8-10am your audience's timezone.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
