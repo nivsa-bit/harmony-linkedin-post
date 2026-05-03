@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Post — Harmony Founder Launch v2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #F4F2EE; color: #191919; line-height: 1.5; }
+
+        .li-nav { background: #FFFFFF; border-bottom: 1px solid #E0E0E0; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 100; }
+        .li-nav-inner { display: flex; align-items: center; max-width: 1128px; width: 100%; gap: 8px; }
+        .li-logo { width: 34px; height: 34px; background: #0A66C2; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.1rem; margin-right: 4px; }
+        .li-search { background: #EDF3F8; border: none; border-radius: 4px; padding: 8px 12px 8px 16px; font-size: 0.85rem; color: #666; width: 280px; }
+        .li-nav-items { display: flex; margin-left: auto; gap: 4px; }
+        .li-nav-item { display: flex; flex-direction: column; align-items: center; padding: 4px 12px; font-size: 0.65rem; color: #666; text-decoration: none; border-bottom: 2px solid transparent; min-width: 60px; }
+        .li-nav-item.active { color: #191919; border-bottom-color: #191919; }
+        .li-nav-icon { font-size: 1.3rem; margin-bottom: 2px; }
+
+        .li-page { max-width: 1128px; margin: 0 auto; display: grid; grid-template-columns: 225px 1fr 300px; gap: 24px; padding: 24px; }
+
+        .li-sidebar-left { background: white; border-radius: 8px; border: 1px solid #E0E0E0; overflow: hidden; }
+        .li-profile-banner { height: 56px; background: linear-gradient(135deg, #1E1B4B, #4F46E5); }
+        .li-profile-avatar-small { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #4F46E5, #7C3AED); border: 3px solid white; margin: -32px auto 8px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: white; font-weight: 700; }
+        .li-profile-info { text-align: center; padding: 0 16px 16px; }
+        .li-profile-info .name { font-size: 0.9rem; font-weight: 600; }
+        .li-profile-info .title { font-size: 0.72rem; color: #666; margin-top: 2px; }
+        .li-profile-stats { border-top: 1px solid #E0E0E0; padding: 12px 16px; }
+        .li-stat-row { display: flex; justify-content: space-between; font-size: 0.72rem; padding: 3px 0; }
+        .li-stat-row span:first-child { color: #666; }
+        .li-stat-row span:last-child { color: #0A66C2; font-weight: 600; }
+
+        .li-sidebar-right { display: flex; flex-direction: column; gap: 16px; }
+        .li-trending { background: white; border-radius: 8px; border: 1px solid #E0E0E0; padding: 16px; }
+        .li-trending h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 12px; }
+        .li-trend-item { padding: 8px 0; border-bottom: 1px solid #F0F0F0; }
+        .li-trend-item:last-child { border-bottom: none; }
+        .li-trend-item .topic { font-size: 0.8rem; font-weight: 600; }
+        .li-trend-item .readers { font-size: 0.7rem; color: #666; }
+
+        .li-feed { display: flex; flex-direction: column; gap: 8px; }
+        .li-create { background: white; border-radius: 8px; border: 1px solid #E0E0E0; padding: 16px; }
+        .li-create-top { display: flex; align-items: center; gap: 12px; }
+        .li-create-avatar { width: 48px; height: 48px; border-radius: 50%; background: #E0E0E0; }
+        .li-create-input { flex: 1; border: 1px solid #BFBFBF; border-radius: 24px; padding: 12px 16px; font-size: 0.85rem; color: #666; }
+        .li-create-actions { display: flex; justify-content: space-around; margin-top: 12px; }
+        .li-create-btn { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #666; font-weight: 600; padding: 8px 12px; border-radius: 4px; }
+
+        .li-post { background: white; border-radius: 8px; border: 1px solid #E0E0E0; overflow: hidden; }
+        .li-post-header { display: flex; align-items: flex-start; padding: 16px 16px 0; gap: 12px; }
+        .li-post-avatar { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; font-weight: 700; }
+        .li-post-meta { flex: 1; }
+        .li-post-name { font-size: 0.88rem; font-weight: 600; }
+        .li-post-name span { color: #666; font-weight: 400; }
+        .li-post-headline { font-size: 0.75rem; color: #666; margin-top: 1px; }
+        .li-post-time { font-size: 0.72rem; color: #666; margin-top: 1px; }
+        .li-post-dots { font-size: 1.2rem; color: #666; padding: 4px 8px; }
+
+        .li-post-content { padding: 12px 16px; font-size: 0.88rem; line-height: 1.55; }
+        .li-post-content p { margin-bottom: 10px; }
+        .li-post-content p:last-child { margin-bottom: 0; }
+        .li-post-content strong { font-weight: 600; }
+        .li-post-content .hashtag { color: #0A66C2; font-weight: 600; }
+
+        .li-post-image { width: 100%; background: linear-gradient(160deg, #0F0A2E 0%, #1E1B4B 30%, #3730A3 60%, #4F46E5 100%); min-height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 48px 40px; position: relative; overflow: hidden; }
+        .li-post-image::before { content: ''; position: absolute; top: -40%; left: -20%; width: 140%; height: 180%; background: radial-gradient(circle at 25% 30%, rgba(124,58,237,0.25) 0%, transparent 50%), radial-gradient(circle at 75% 70%, rgba(14,165,233,0.2) 0%, transparent 50%); pointer-events: none; }
+        .li-post-image .img-content { position: relative; z-index: 1; text-align: center; }
+        .li-post-image .img-eyebrow { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; margin-bottom: 16px; }
+        .li-post-image h2 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; }
+        .li-post-image h2 .hl { background: linear-gradient(90deg, #A78BFA, #67E8F9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .li-post-image .img-sub { font-size: 0.95rem; opacity: 0.7; max-width: 440px; margin: 0 auto 28px; }
+        .img-pillars { display: flex; gap: 16px; justify-content: center; }
+        .img-pillar { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 18px 16px; text-align: center; width: 140px; }
+        .img-pillar-icon { font-size: 1.4rem; margin-bottom: 6px; }
+        .img-pillar-text { font-size: 0.75rem; font-weight: 600; line-height: 1.3; }
+        .li-post-image .img-logo { position: absolute; bottom: 18px; right: 22px; opacity: 0.35; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; z-index: 1; }
+
+        .li-post-engagement { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; font-size: 0.75rem; color: #666; }
+        .li-reactions { display: flex; align-items: center; gap: 4px; }
+        .li-reaction-icons { display: flex; }
+        .li-reaction-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; border: 2px solid white; margin-right: -4px; }
+        .li-reaction-icon.like { background: #0A66C2; }
+        .li-reaction-icon.celebrate { background: #44712E; }
+        .li-reaction-icon.love { background: #DF704D; }
+        .li-reaction-icon.insightful { background: #E7A33E; }
+        .li-engagement-right { display: flex; gap: 8px; }
+
+        .li-post-actions { display: flex; border-top: 1px solid #E0E0E0; padding: 4px 8px; }
+        .li-action-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 8px; font-size: 0.82rem; font-weight: 600; color: #666; border-radius: 4px; cursor: pointer; }
+        .li-action-btn:hover { background: #F0F0F0; }
+        .li-action-icon { font-size: 1.15rem; }
+
+        .li-comments { border-top: 1px solid #E0E0E0; padding: 12px 16px; }
+        .li-comment-input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .li-comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: #E0E0E0; }
+        .li-comment-input { flex: 1; border: 1px solid #BFBFBF; border-radius: 24px; padding: 8px 14px; font-size: 0.8rem; color: #666; }
+        .li-comment { display: flex; gap: 10px; margin-bottom: 14px; }
+        .li-comment:last-child { margin-bottom: 0; }
+        .li-comment-av { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: white; font-weight: 700; }
+        .li-comment-body { background: #F2F2F2; border-radius: 0 8px 8px 8px; padding: 10px 14px; flex: 1; }
+        .li-comment-name { font-size: 0.78rem; font-weight: 600; }
+        .li-comment-title { font-size: 0.68rem; color: #666; margin-bottom: 6px; }
+        .li-comment-text { font-size: 0.82rem; line-height: 1.45; }
+        .li-comment-actions { display: flex; gap: 12px; margin-top: 6px; font-size: 0.7rem; color: #666; font-weight: 600; padding-left: 42px; margin-bottom: 10px; }
+        .li-comment-actions span { cursor: pointer; }
+        .li-comment-actions span:hover { color: #0A66C2; }
+
+        @media (max-width: 1000px) {
+            .li-page { grid-template-columns: 1fr; max-width: 600px; }
+            .li-sidebar-left, .li-sidebar-right { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="li-nav">
+    <div class="li-nav-inner">
+        <div class="li-logo">in</div>
+        <input type="text" class="li-search" placeholder="Search" readonly>
+        <div class="li-nav-items">
+            <a class="li-nav-item active"><span class="li-nav-icon">&#127968;</span>Home</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128101;</span>Network</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128188;</span>Jobs</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128172;</span>Messaging</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128276;</span>Notifications</a>
+        </div>
+    </div>
+</nav>
+
+<div class="li-page">
+
+    <aside class="li-sidebar-left">
+        <div class="li-profile-banner"></div>
+        <div class="li-profile-avatar-small">N</div>
+        <div class="li-profile-info">
+            <div class="name">Niv S.</div>
+            <div class="title">Head of Product @ OneAI | Building Harmony</div>
+        </div>
+        <div class="li-profile-stats">
+            <div class="li-stat-row"><span>Profile viewers</span><span>1,204</span></div>
+            <div class="li-stat-row"><span>Post impressions</span><span>28,917</span></div>
+        </div>
+    </aside>
+
+    <main class="li-feed">
+
+        <div class="li-create">
+            <div class="li-create-top">
+                <div class="li-create-avatar"></div>
+                <div class="li-create-input">Start a post</div>
+            </div>
+            <div class="li-create-actions">
+                <div class="li-create-btn">&#127912; Photo</div>
+                <div class="li-create-btn">&#127909; Video</div>
+                <div class="li-create-btn">&#128196; Article</div>
+            </div>
+        </div>
+
+        <!-- ===== THE POST ===== -->
+        <div class="li-post">
+            <div class="li-post-header">
+                <div class="li-post-avatar" style="background: linear-gradient(135deg, #4F46E5, #7C3AED);">N</div>
+                <div class="li-post-meta">
+                    <div class="li-post-name">Niv S. <span>&#8226; 1st</span></div>
+                    <div class="li-post-headline">Head of Product @ OneAI | Building Harmony</div>
+                    <div class="li-post-time">2h <span>&#8226;</span> &#127760;</div>
+                </div>
+                <div class="li-post-dots">&#8943;</div>
+            </div>
+
+            <div class="li-post-content">
+                <p>We just launched Harmony. And I want to tell you what made us build it.</p>
+
+                <p>Every week, I talk to sales leaders who say the same thing:</p>
+
+                <p><em>"We bought an AI call center. It was great for a month. Then it stopped getting better. Now we spend more time maintaining it than it saves us."</em></p>
+
+                <p>That's the dirty secret of this industry. Most AI call centers are frozen in time. You deploy them, they work at a fixed level, and the only way to improve them is to rewrite prompts, hire a specialist, or wait for the next vendor "optimization cycle."</p>
+
+                <p>Meanwhile, your best human SDR learns something new on every call. They share it with the team at standup. The whole team gets better. That feedback loop &mdash; learn, share, align &mdash; is what makes great sales teams great.</p>
+
+                <p>No AI call center has that. Until now.</p>
+
+                <p><strong>We built Harmony around three beliefs:</strong></p>
+
+                <p><strong>1. Agents should learn from each other.</strong><br>
+                When one agent discovers that a specific objection handling doubles close rates &mdash; every agent should know it by the next call. Not next month. Not after a retune. Automatically. Same techniques, same best practices, same product knowledge. One team brain.</p>
+
+                <p><strong>2. You shouldn't need a prompt engineer to run an AI team.</strong><br>
+                Setup should take hours, not weeks. No scripting. No prompt templates. Connect your CRM, your call recordings, your knowledge base &mdash; and Harmony builds agents from what already works for you. A simple UI that any sales leader can use, not a developer console that needs an engineering ticket.</p>
+
+                <p><strong>3. Trust should be earned before the first real call.</strong><br>
+                The reason people don't trust AI agents is that they've been burned. Agents go off-script. They sound robotic. They handle the easy calls and choke on edge cases. So we built simulation-first training: run your agents through hundreds of synthetic conversations against real customer personas before they ever pick up a live phone. You see exactly where they fail, fix it, and go live with confidence.</p>
+
+                <p>And because we own our voice engine end-to-end, you're not paying hidden markups or dealing with third-party latency. Your agents sound natural, respond fast, and you control every aspect of the experience.</p>
+
+                <p>Harmony is headless &mdash; it connects to your CRM, your tools, your LLM. It doesn't replace your stack. It makes it smarter.</p>
+
+                <p>If you've switched AI call center vendors and still aren't satisfied &mdash; the problem isn't the vendor. It's that nobody built an AI team that actually learns, actually shares, and actually gets better without you having to babysit it.</p>
+
+                <p>That's what we built. Link in comments.</p>
+
+                <p><span class="hashtag">#Harmony</span> <span class="hashtag">#AICallCenter</span> <span class="hashtag">#ProductLaunch</span> <span class="hashtag">#OneAI</span></p>
+            </div>
+
+            <div class="li-post-image">
+                <div class="img-content">
+                    <div class="img-eyebrow">Introducing</div>
+                    <h2>AI agents that <span class="hl">learn,<br>share, and align</span></h2>
+                    <div class="img-sub">No prompts. No tuning. No babysitting. Just a team that gets better after every call.</div>
+                    <div class="img-pillars">
+                        <div class="img-pillar">
+                            <div class="img-pillar-icon">&#129504;</div>
+                            <div class="img-pillar-text">Learn From<br>Each Other</div>
+                        </div>
+                        <div class="img-pillar">
+                            <div class="img-pillar-icon">&#9889;</div>
+                            <div class="img-pillar-text">Zero<br>Prompting</div>
+                        </div>
+                        <div class="img-pillar">
+                            <div class="img-pillar-icon">&#128101;</div>
+                            <div class="img-pillar-text">Simulation<br>First Trust</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="img-logo">HARMONY</div>
+            </div>
+
+            <div class="li-post-engagement">
+                <div class="li-reactions">
+                    <div class="li-reaction-icons">
+                        <div class="li-reaction-icon like">&#128077;</div>
+                        <div class="li-reaction-icon celebrate">&#128079;</div>
+                        <div class="li-reaction-icon love">&#10084;</div>
+                        <div class="li-reaction-icon insightful">&#128161;</div>
+                    </div>
+                    &nbsp;Yoav Shoham and 5,104 others
+                </div>
+                <div class="li-engagement-right">
+                    <span>389 comments</span>
+                    <span>&bull;</span>
+                    <span>214 reposts</span>
+                </div>
+            </div>
+
+            <div class="li-post-actions">
+                <div class="li-action-btn"><span class="li-action-icon">&#128077;</span> Like</div>
+                <div class="li-action-btn"><span class="li-action-icon">&#128172;</span> Comment</div>
+                <div class="li-action-btn"><span class="li-action-icon">&#128257;</span> Repost</div>
+                <div class="li-action-btn"><span class="li-action-icon">&#9993;</span> Send</div>
+            </div>
+
+            <div class="li-comments">
+                <div class="li-comment-input-row">
+                    <div class="li-comment-avatar"></div>
+                    <div class="li-comment-input">Add a comment...</div>
+                </div>
+
+                <div class="li-comment">
+                    <div class="li-comment-av" style="background: #0A66C2;">SL</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Sarah Levine</div>
+                        <div class="li-comment-title">CRO @ DataPulse | Ex-HubSpot</div>
+                        <div class="li-comment-text">"The only way to improve them is to rewrite prompts, hire a specialist, or wait for the next vendor optimization cycle." I felt this in my bones. We literally have a Slack channel called #ai-agent-fires where the team flags things the agent got wrong, and someone manually goes in to fix the prompt. That's not AI. That's a very expensive chatbot with a babysitter. The learn-from-each-other model is what this space has been missing.</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions">
+                    <span>Like (112)</span>
+                    <span>Reply</span>
+                    <span>1h</span>
+                </div>
+
+                <div class="li-comment">
+                    <div class="li-comment-av" style="background: #44712E;">TW</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Tom Whitaker</div>
+                        <div class="li-comment-title">VP Engineering @ Converge.io</div>
+                        <div class="li-comment-text">The simulation-first approach is the most underrated part of this. Every AI call center I've evaluated says "deploy and iterate." That's code for "let your customers be the test subjects." Training against synthetic personas first and going live only when you trust the output? That should be the standard, not the exception.</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions">
+                    <span>Like (87)</span>
+                    <span>Reply</span>
+                    <span>48m</span>
+                </div>
+
+                <div class="li-comment">
+                    <div class="li-comment-av" style="background: #DC2626;">KP</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Karen Park</div>
+                        <div class="li-comment-title">Head of Sales @ NovaBridge</div>
+                        <div class="li-comment-text">The alignment problem is real and nobody talks about it. I have 8 AI agents and they all handle the same objection differently. When we release a new product feature, half of them still reference the old one for weeks. If Harmony actually keeps every agent on the same page automatically, that alone saves us 10+ hours a week in QA. When can I see a demo?</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions">
+                    <span>Like (94)</span>
+                    <span>Reply</span>
+                    <span>35m</span>
+                </div>
+
+                <div class="li-comment" style="padding-left: 42px;">
+                    <div class="li-comment-av" style="background: linear-gradient(135deg, #4F46E5, #7C3AED);">N</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Niv S. <span style="color: #666; font-weight: 400;">&bull; Author</span></div>
+                        <div class="li-comment-title">Head of Product @ OneAI</div>
+                        <div class="li-comment-text">Karen &mdash; yes, that's exactly right. When you update product info in one place, every agent knows it on the next call. When one agent discovers a better way to handle "we already have a vendor" &mdash; every agent adopts it. No manual sync, no QA cycles. DM me and we'll set up time.</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions" style="padding-left: 84px;">
+                    <span>Like (61)</span>
+                    <span>Reply</span>
+                    <span>22m</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <aside class="li-sidebar-right">
+        <div class="li-trending">
+            <h3>LinkedIn News</h3>
+            <div class="li-trend-item"><div class="topic">AI call center quality under fire</div><div class="readers">5,421 readers</div></div>
+            <div class="li-trend-item"><div class="topic">The prompt engineering problem</div><div class="readers">3,847 readers</div></div>
+            <div class="li-trend-item"><div class="topic">Why 60% of AI deployments stall</div><div class="readers">4,129 readers</div></div>
+            <div class="li-trend-item"><div class="topic">Self-learning AI agents are here</div><div class="readers">2,918 readers</div></div>
+        </div>
+    </aside>
+
+</div>
+</body>
+</html>
