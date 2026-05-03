@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Post Mockup — Harmony Customer Story</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #F4F2EE;
+            color: #191919;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ===== LINKEDIN NAV ===== */
+        .li-nav {
+            background: #FFFFFF;
+            border-bottom: 1px solid #E0E0E0;
+            padding: 0 24px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .li-nav-inner {
+            display: flex;
+            align-items: center;
+            max-width: 1128px;
+            width: 100%;
+            gap: 8px;
+        }
+
+        .li-logo {
+            width: 34px;
+            height: 34px;
+            background: #0A66C2;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-right: 4px;
+            flex-shrink: 0;
+        }
+
+        .li-search {
+            background: #EDF3F8;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px 8px 36px;
+            font-size: 0.85rem;
+            color: #666;
+            width: 280px;
+            position: relative;
+        }
+
+        .li-search-wrapper {
+            position: relative;
+        }
+
+        .li-search-wrapper::before {
+            content: '\1F50D';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            opacity: 0.5;
+        }
+
+        .li-nav-items {
+            display: flex;
+            margin-left: auto;
+            gap: 4px;
+        }
+
+        .li-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px 12px;
+            font-size: 0.65rem;
+            color: #666;
+            cursor: pointer;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            min-width: 60px;
+        }
+
+        .li-nav-item.active {
+            color: #191919;
+            border-bottom-color: #191919;
+        }
+
+        .li-nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+        }
+
+        /* ===== PAGE LAYOUT ===== */
+        .li-page {
+            max-width: 1128px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 225px 1fr 300px;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        /* ===== LEFT SIDEBAR ===== */
+        .li-sidebar-left {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+            overflow: hidden;
+        }
+
+        .li-profile-banner {
+            height: 56px;
+            background: linear-gradient(135deg, #0A66C2, #004182);
+        }
+
+        .li-profile-avatar-small {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E7A94B, #D4943A);
+            border: 3px solid white;
+            margin: -32px auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .li-profile-info {
+            text-align: center;
+            padding: 0 16px 16px;
+        }
+
+        .li-profile-info .name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .li-profile-info .title {
+            font-size: 0.72rem;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .li-profile-stats {
+            border-top: 1px solid #E0E0E0;
+            padding: 12px 16px;
+        }
+
+        .li-stat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            padding: 3px 0;
+        }
+
+        .li-stat-row span:first-child { color: #666; }
+        .li-stat-row span:last-child { color: #0A66C2; font-weight: 600; }
+
+        /* ===== RIGHT SIDEBAR ===== */
+        .li-sidebar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .li-trending {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+            padding: 16px;
+        }
+
+        .li-trending h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .li-trend-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .li-trend-item:last-child { border-bottom: none; }
+
+        .li-trend-item .topic {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #191919;
+        }
+
+        .li-trend-item .readers {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* ===== MAIN FEED ===== */
+        .li-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* --- Create Post Bar --- */
+        .li-create {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+            padding: 16px;
+        }
+
+        .li-create-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .li-create-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #E0E0E0;
+            flex-shrink: 0;
+        }
+
+        .li-create-input {
+            flex: 1;
+            border: 1px solid #BFBFBF;
+            border-radius: 24px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .li-create-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 12px;
+            padding-top: 4px;
+        }
+
+        .li-create-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .li-create-btn:hover { background: #F0F0F0; }
+
+        /* --- Post Card --- */
+        .li-post {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+            overflow: hidden;
+        }
+
+        .li-post-header {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px 16px 0;
+            gap: 12px;
+        }
+
+        .li-post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .li-post-meta {
+            flex: 1;
+        }
+
+        .li-post-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #191919;
+        }
+
+        .li-post-name span {
+            color: #666;
+            font-weight: 400;
+        }
+
+        .li-post-headline {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 1px;
+        }
+
+        .li-post-time {
+            font-size: 0.72rem;
+            color: #666;
+            margin-top: 1px;
+        }
+
+        .li-post-time span { margin: 0 2px; }
+
+        .li-post-follow {
+            color: #0A66C2;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 0;
+            white-space: nowrap;
+        }
+
+        .li-post-dots {
+            font-size: 1.2rem;
+            color: #666;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin-left: auto;
+        }
+
+        /* Post Content */
+        .li-post-content {
+            padding: 12px 16px;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: #191919;
+        }
+
+        .li-post-content p {
+            margin-bottom: 10px;
+        }
+
+        .li-post-content p:last-child { margin-bottom: 0; }
+
+        .li-post-content strong {
+            font-weight: 600;
+        }
+
+        .li-post-content .hashtag {
+            color: #0A66C2;
+            font-weight: 600;
+        }
+
+        .li-post-content .see-more {
+            color: #666;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .li-post-content .emoji {
+            font-size: 1rem;
+        }
+
+        /* Post Image / Card */
+        .li-post-image {
+            width: 100%;
+            background: linear-gradient(135deg, #1E1B4B, #3730A3, #4F46E5);
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 48px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .li-post-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .li-post-image .img-badge {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 0.03em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .li-post-image h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+            line-height: 1.25;
+        }
+
+        .li-post-image .img-sub {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            text-align: center;
+            max-width: 420px;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .li-post-image .img-stats {
+            display: flex;
+            gap: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .img-stat {
+            text-align: center;
+        }
+
+        .img-stat-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        .img-stat-label {
+            font-size: 0.7rem;
+            opacity: 0.65;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .li-post-image .img-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 24px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            z-index: 1;
+        }
+
+        /* Engagement Bar */
+        .li-post-engagement {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .li-reactions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .li-reaction-icons {
+            display: flex;
+        }
+
+        .li-reaction-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            border: 2px solid white;
+            margin-right: -4px;
+        }
+
+        .li-reaction-icon.like { background: #0A66C2; }
+        .li-reaction-icon.celebrate { background: #44712E; }
+        .li-reaction-icon.love { background: #DF704D; }
+
+        .li-engagement-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Action Buttons */
+        .li-post-actions {
+            display: flex;
+            border-top: 1px solid #E0E0E0;
+            padding: 4px 8px;
+        }
+
+        .li-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #666;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .li-action-btn:hover {
+            background: #F0F0F0;
+        }
+
+        .li-action-icon {
+            font-size: 1.15rem;
+        }
+
+        /* --- Comments Section --- */
+        .li-comments {
+            border-top: 1px solid #E0E0E0;
+            padding: 12px 16px;
+        }
+
+        .li-comment-input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .li-comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #E0E0E0;
+            flex-shrink: 0;
+        }
+
+        .li-comment-input {
+            flex: 1;
+            border: 1px solid #BFBFBF;
+            border-radius: 24px;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .li-comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .li-comment:last-child { margin-bottom: 0; }
+
+        .li-comment-av {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .li-comment-body {
+            background: #F2F2F2;
+            border-radius: 0 8px 8px 8px;
+            padding: 10px 14px;
+            flex: 1;
+        }
+
+        .li-comment-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .li-comment-title {
+            font-size: 0.68rem;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .li-comment-text {
+            font-size: 0.82rem;
+            line-height: 1.45;
+        }
+
+        .li-comment-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: 600;
+            padding-left: 42px;
+        }
+
+        .li-comment-actions span { cursor: pointer; }
+        .li-comment-actions span:hover { color: #0A66C2; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1000px) {
+            .li-page {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .li-sidebar-left, .li-sidebar-right { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== LINKEDIN NAV ===== -->
+<nav class="li-nav">
+    <div class="li-nav-inner">
+        <div class="li-logo">in</div>
+        <div class="li-search-wrapper">
+            <input type="text" class="li-search" placeholder="Search" readonly>
+        </div>
+        <div class="li-nav-items">
+            <a class="li-nav-item active"><span class="li-nav-icon">&#127968;</span>Home</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128101;</span>Network</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128188;</span>Jobs</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128172;</span>Messaging</a>
+            <a class="li-nav-item"><span class="li-nav-icon">&#128276;</span>Notifications</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== PAGE LAYOUT ===== -->
+<div class="li-page">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="li-sidebar-left">
+        <div class="li-profile-banner"></div>
+        <div class="li-profile-avatar-small">MR</div>
+        <div class="li-profile-info">
+            <div class="name">Mark Reynolds</div>
+            <div class="title">VP of Sales @ TechForge Solutions</div>
+        </div>
+        <div class="li-profile-stats">
+            <div class="li-stat-row">
+                <span>Profile viewers</span>
+                <span>847</span>
+            </div>
+            <div class="li-stat-row">
+                <span>Post impressions</span>
+                <span>12,482</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN FEED -->
+    <main class="li-feed">
+
+        <!-- Create Post -->
+        <div class="li-create">
+            <div class="li-create-top">
+                <div class="li-create-avatar"></div>
+                <div class="li-create-input">Start a post</div>
+            </div>
+            <div class="li-create-actions">
+                <div class="li-create-btn">&#127912; Photo</div>
+                <div class="li-create-btn">&#127909; Video</div>
+                <div class="li-create-btn">&#128196; Article</div>
+            </div>
+        </div>
+
+        <!-- ===== THE POST ===== -->
+        <div class="li-post">
+            <!-- Post Header -->
+            <div class="li-post-header">
+                <div class="li-post-avatar" style="background: linear-gradient(135deg, #E7A94B, #D4943A);">MR</div>
+                <div class="li-post-meta">
+                    <div class="li-post-name">Mark Reynolds <span>&#8226; 1st</span></div>
+                    <div class="li-post-headline">VP of Sales @ TechForge Solutions | Building high-performance revenue teams</div>
+                    <div class="li-post-time">2d <span>&#8226;</span> &#127760;</div>
+                </div>
+                <div class="li-post-dots">&#8943;</div>
+            </div>
+
+            <!-- Post Content -->
+            <div class="li-post-content">
+                <p>I've managed sales teams for 14 years. I've tried every tool out there. But I've never had an experience like the last 90 days with <strong>Harmony</strong>.</p>
+
+                <p>Let me tell you the story:</p>
+
+                <p><strong>Week 1 &mdash; Setup (this is where I got skeptical)</strong><br>
+                Their team jumped on a call, walked us through the integration, and connected our HubSpot, Gong recordings, and call logs in a single afternoon. No engineering tickets. No "we'll circle back." Just... done. I kept waiting for the catch.</p>
+
+                <p><strong>Week 2 &mdash; "Wait, it already knows?"</strong><br>
+                I opened the dashboard and saw something I didn't expect: Harmony had already built a shared understanding of our customers &mdash; across sales, support, AND onboarding. Not three siloed views. One brain. My SDRs were getting context from support tickets they'd never seen. My AEs were referencing onboarding notes they didn't know existed. The silos just... disappeared.</p>
+
+                <p><strong>Week 4 &mdash; The agents started getting smarter</strong><br>
+                Here's what blew my mind. I didn't touch a single prompt. Didn't edit a script. Didn't schedule a "quarterly optimization review." The AI agents just... got better. They learned from every call &mdash; what worked, what didn't, which objections led to closes. By week 4, their qualification accuracy was up 34% and nobody tuned anything.</p>
+
+                <p><strong>Week 6 &mdash; I ran a 1:1 with an AI agent</strong><br>
+                This sounds wild, I know. But Harmony's interface isn't a bot console. It's a team UI. I literally pulled up my AI SDR agent, reviewed its pipeline performance, gave it feedback on talk-time ratio, and watched it adjust in real-time. It felt like coaching a new hire &mdash; except this one never forgets, never gets tired, and processes feedback instantly.</p>
+
+                <p><strong>Week 8 &mdash; We ran simulations before going live with a new ICP</strong><br>
+                Before targeting a new vertical, we tested the agents against persona-driven simulations. Hundreds of synthetic calls. A/B tested two pitch approaches. Found the winner before a single real prospect picked up the phone. That's not A/B testing &mdash; that's a cheat code.</p>
+
+                <p><strong>Day 90 &mdash; The numbers</strong><br>
+                <span class="emoji">&#128200;</span> Contact rate: 68% (was 41%)<br>
+                <span class="emoji">&#128200;</span> Qualified meetings booked: up 52%<br>
+                <span class="emoji">&#128200;</span> No-show rate: down 38%<br>
+                <span class="emoji">&#128200;</span> Time my SDR team spends on manual dial: 0 hours<br>
+                <span class="emoji">&#128200;</span> Prompts I've manually edited: 0</p>
+
+                <p>But the number that matters most? My team doesn't feel replaced. They feel <strong>amplified</strong>. They manage AI agents the same way they manage their human teammates. And because everything runs through one shared brain, every department benefits from every conversation.</p>
+
+                <p>If you're still stitching together 5 different tools, writing prompts by hand, and praying your AI doesn't go off-script &mdash; there's a different way.</p>
+
+                <p>Happy to share more in the comments. cc <span style="color: #0A66C2; font-weight: 600;">@Harmony</span></p>
+
+                <p><span class="hashtag">#AIinSales</span> <span class="hashtag">#SalesAutomation</span> <span class="hashtag">#Harmony</span> <span class="hashtag">#FutureOfWork</span> <span class="hashtag">#RevenueOperations</span></p>
+            </div>
+
+            <!-- Post Image -->
+            <div class="li-post-image">
+                <div class="img-badge">Harmony &mdash; 90-Day Results</div>
+                <h2>One Brain. Self-Learning.<br>Managed Like People.</h2>
+                <div class="img-sub">How TechForge Solutions transformed their sales pipeline without adding headcount</div>
+                <div class="img-stats">
+                    <div class="img-stat">
+                        <div class="img-stat-val">+52%</div>
+                        <div class="img-stat-label">Qualified Meetings</div>
+                    </div>
+                    <div class="img-stat">
+                        <div class="img-stat-val">68%</div>
+                        <div class="img-stat-label">Contact Rate</div>
+                    </div>
+                    <div class="img-stat">
+                        <div class="img-stat-val">0</div>
+                        <div class="img-stat-label">Prompts Edited</div>
+                    </div>
+                    <div class="img-stat">
+                        <div class="img-stat-val">-38%</div>
+                        <div class="img-stat-label">No-Show Rate</div>
+                    </div>
+                </div>
+                <div class="img-logo">HARMONY</div>
+            </div>
+
+            <!-- Engagement -->
+            <div class="li-post-engagement">
+                <div class="li-reactions">
+                    <div class="li-reaction-icons">
+                        <div class="li-reaction-icon like">&#128077;</div>
+                        <div class="li-reaction-icon celebrate">&#128079;</div>
+                        <div class="li-reaction-icon love">&#10084;</div>
+                    </div>
+                    &nbsp;Sarah Chen and 2,847 others
+                </div>
+                <div class="li-engagement-right">
+                    <span>186 comments</span>
+                    <span>&bull;</span>
+                    <span>94 reposts</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="li-post-actions">
+                <div class="li-action-btn">
+                    <span class="li-action-icon">&#128077;</span> Like
+                </div>
+                <div class="li-action-btn">
+                    <span class="li-action-icon">&#128172;</span> Comment
+                </div>
+                <div class="li-action-btn">
+                    <span class="li-action-icon">&#128257;</span> Repost
+                </div>
+                <div class="li-action-btn">
+                    <span class="li-action-icon">&#9993;</span> Send
+                </div>
+            </div>
+
+            <!-- Comments -->
+            <div class="li-comments">
+                <div class="li-comment-input-row">
+                    <div class="li-comment-avatar"></div>
+                    <div class="li-comment-input">Add a comment...</div>
+                </div>
+
+                <!-- Comment 1 -->
+                <div class="li-comment">
+                    <div class="li-comment-av" style="background: #0A66C2;">JL</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Jessica Liu</div>
+                        <div class="li-comment-title">Head of Revenue Operations @ ScaleUp Inc.</div>
+                        <div class="li-comment-text">The "one brain" part is what got me. We have the same problem &mdash; sales knows things support doesn't, support knows things CS doesn't. Every team is building their own picture of the customer. Did Harmony actually unify that from day one or did it take time to build context?</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions">
+                    <span>Like (24)</span>
+                    <span>Reply</span>
+                    <span>1d</span>
+                </div>
+
+                <!-- Reply from Mark -->
+                <div class="li-comment" style="padding-left: 42px;">
+                    <div class="li-comment-av" style="background: linear-gradient(135deg, #E7A94B, #D4943A);">MR</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Mark Reynolds <span style="color: #666; font-weight: 400;">&bull; Author</span></div>
+                        <div class="li-comment-title">VP of Sales @ TechForge Solutions</div>
+                        <div class="li-comment-text">Jessica &mdash; honestly, by the end of Week 2 it had already connected the dots across our HubSpot, Gong, and Zendesk data. The shared brain isn't something you build &mdash; it builds itself from your existing systems. That's the part that surprised me the most.</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions" style="padding-left: 84px;">
+                    <span>Like (18)</span>
+                    <span>Reply</span>
+                    <span>1d</span>
+                </div>
+
+                <!-- Comment 2 -->
+                <div class="li-comment">
+                    <div class="li-comment-av" style="background: #44712E;">DP</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">David Park</div>
+                        <div class="li-comment-title">CRO @ NovaBridge &bull; Ex-Salesforce</div>
+                        <div class="li-comment-text">"I ran a 1:1 with an AI agent" &mdash; this line stopped me scrolling. We've been treating AI like a tool. Sounds like Harmony treats it like a teammate. That mental model shift is everything. How does the feedback loop actually work in practice?</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions">
+                    <span>Like (41)</span>
+                    <span>Reply</span>
+                    <span>22h</span>
+                </div>
+
+                <!-- Comment 3 -->
+                <div class="li-comment">
+                    <div class="li-comment-av" style="background: #7C3AED;">AT</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Aisha Thompson</div>
+                        <div class="li-comment-title">VP Customer Success @ CloudReach</div>
+                        <div class="li-comment-text">This is the first time I've heard a sales leader talk about an AI tool that also helps CS and onboarding. We're so tired of buying point solutions that only serve one team. The "breaking the silos" angle resonates hard. DMing you.</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions">
+                    <span>Like (33)</span>
+                    <span>Reply</span>
+                    <span>18h</span>
+                </div>
+
+                <!-- Comment 4 -->
+                <div class="li-comment">
+                    <div class="li-comment-av" style="background: #DC2626;">RK</div>
+                    <div class="li-comment-body">
+                        <div class="li-comment-name">Ryan Kim</div>
+                        <div class="li-comment-title">Founder @ PipelinePro &bull; AI Skeptic turned believer</div>
+                        <div class="li-comment-text">Zero prompts edited in 90 days. Let that sink in. Every other platform I've used requires a prompt engineer on staff just to keep things from going off the rails. The self-learning piece is either the best feature in AI sales tooling or the best marketing I've seen this year. Either way, I'm booking a demo.</div>
+                    </div>
+                </div>
+                <div class="li-comment-actions">
+                    <span>Like (56)</span>
+                    <span>Reply</span>
+                    <span>14h</span>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="li-sidebar-right">
+        <div class="li-trending">
+            <h3>LinkedIn News</h3>
+            <div class="li-trend-item">
+                <div class="topic">AI agents replace traditional SDR teams</div>
+                <div class="readers">3,284 readers</div>
+            </div>
+            <div class="li-trend-item">
+                <div class="topic">Voice AI funding hits record high</div>
+                <div class="readers">2,108 readers</div>
+            </div>
+            <div class="li-trend-item">
+                <div class="topic">Sales automation trends in 2026</div>
+                <div class="readers">5,421 readers</div>
+            </div>
+            <div class="li-trend-item">
+                <div class="topic">The end of siloed customer data?</div>
+                <div class="readers">1,847 readers</div>
+            </div>
+            <div class="li-trend-item">
+                <div class="topic">Enterprise AI adoption accelerates</div>
+                <div class="readers">4,129 readers</div>
+            </div>
+        </div>
+    </aside>
+
+</div>
+
+</body>
+</html>
